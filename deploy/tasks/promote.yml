@@ -1,0 +1,21 @@
+---
+- name: Get the current release hash
+  shell: cat {{ docroot }}build/release-hash
+  register: currentreleasehash
+
+- name: Create the release folder
+  shell: mv {{ docroot }}build {{ docroot }}{{ deploymentdate.stdout }}-release-{{ currentreleasehash.stdout }}
+
+- name: Update release folder owner and group
+  shell: chown -R {{ app_folder_owner }}.{{ app_folder_group }} {{ docroot }}{{ deploymentdate.stdout }}-release-{{ currentreleasehash.stdout }}
+
+- name: Promoting release into {{ app_environment }}
+  file:
+    src: "{{ docroot }}{{ deploymentdate.stdout }}-release-{{ currentreleasehash.stdout }}"
+    dest: "{{ docroot }}current"
+    state: link
+    owner: "{{ app_folder_owner }}"
+    group: "{{ app_folder_group }}"
+
+- name: Update current folder owner and group
+  shell: chown -R {{ app_folder_owner }}.{{ app_folder_group }} {{ docroot }}current

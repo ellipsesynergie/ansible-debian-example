@@ -1,0 +1,14 @@
+---
+- name: Starting cron job
+  cron: name="artisan schedule:run"
+        state=present
+        user="{{ app_folder_owner }}" job="php{{ php_version }} {{ docroot }}current/artisan schedule:run ; 1>> /dev/null 2>&1"
+        cron_file=artisan_dispatcher
+
+- name: Restart queue worker to prevent memory leak
+  cron: name="restart queue worker"
+        state=present
+        minute="30"
+        hour="1"
+        user="{{ app_folder_owner }}" job="php{{ php_version }} {{ docroot }}current/artisan queue:restart ; 1>> /dev/null 2>&1"
+        cron_file=restart_queue_worker

@@ -1,0 +1,3 @@
+---
+- name: Install NTP to setup Time Synchronization
+  apt: pkg=ntp state=present

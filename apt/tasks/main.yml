@@ -1,0 +1,6 @@
+---
+- name: Clean up apt cache
+  shell: apt-get clean
+
+- name: Update apt
+  shell: apt-get update

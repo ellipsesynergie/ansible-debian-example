@@ -1,0 +1,22 @@
+---
+- hosts: worker
+  vars_files:
+  vars:
+    docroot: /var/www/api.your-website.com/
+    app_path: api.your-website.com
+    newrelic_appname: api.your-website.com
+    app_environment: production
+    app_folder_owner: www-data
+    app_folder_group: www-data
+    php_version: 7.2
+  roles:
+    - apt
+    - locale
+    - codedeploy-agent
+    - ntp
+    - unzip
+    - aws-cli
+    - php
+    - php.newrelic
+    - supervisor
+    - job

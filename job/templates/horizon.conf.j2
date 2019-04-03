@@ -1,0 +1,8 @@
+[program:horizon]
+process_name=%(program_name)s
+command=php{{ php_version }} {{ docroot }}current/artisan horizon
+autostart=true
+autorestart=true
+user={{ app_folder_owner }}
+redirect_stderr=true
+stdout_logfile={{ docroot }}current/storage/logs/supervisor.log

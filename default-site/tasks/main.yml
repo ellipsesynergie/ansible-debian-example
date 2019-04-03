@@ -1,0 +1,6 @@
+---
+- name: Create default site directory
+  file: dest={{ docroot }}current/public state=directory owner={{ app_folder_owner }} group={{ app_folder_group }}
+
+- name: Create default site index
+  template: src=index.php.j2 dest={{ docroot }}current/public/index.php owner={{ app_folder_owner }} group={{ app_folder_group }}

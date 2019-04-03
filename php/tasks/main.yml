@@ -1,0 +1,40 @@
+---
+- name: Add PHP Repository
+  apt_repository: repo='ppa:ondrej/php' state=present
+
+- name: Install PHP
+  apt: pkg=php{{ php_version }}-fpm state=present
+
+- name: Install PHP Extension
+  apt: pkg=php{{ php_version }}-{{ item }} state=latest
+  with_items:
+      - common
+      - curl
+      - mysqlnd
+      - gd
+      - mbstring
+      - xml
+      - mysql
+      - zip
+      - intl
+
+- name: Activate PHP Extension
+  shell: phpenmod  {{ item }}
+  with_items:
+      - curl
+      - mysqlnd
+      - gd
+      - mbstring
+      - xml
+      - zip
+      - intl
+
+- name: Copy cli php.ini config
+  template: src=cli-php.ini.j2 dest=/etc/php/7.2/cli/php.ini owner=root group=root
+
+- name: Copy fpm php.ini config
+  template: src=fpm-php.ini.j2 dest=/etc/php/7.2/fpm/php.ini owner=root group=root
+
+- name: Copy fpm pool.d/www.conf config (optimize FPM processes)
+  copy: src=www.conf dest=/etc/php/7.2/fpm/pool.d/www.conf owner=root group=root
+

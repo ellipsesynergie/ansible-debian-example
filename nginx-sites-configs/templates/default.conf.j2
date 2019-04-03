@@ -1,0 +1,39 @@
+server {
+
+    listen 80;
+    server_name {{ item.domain }};
+    root {{ docroot }}current/public;
+    index index.html index.htm index.php;
+
+    charset utf-8;
+
+    # Include the basic h5bp config set
+    include h5bp/{{ h5bp_config_file }};
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location = /robots.txt  { access_log off; log_not_found off; }
+
+    access_log /var/log/nginx/{{ app_path }}.log;
+    error_log  /var/log/nginx/{{ app_path }}-error.log error;
+
+    error_page 404 /index.php;
+
+    sendfile off;
+
+    location ~ \.php$ {
+        fastcgi_split_path_info ^(.+\.php)(/.+)$;
+        fastcgi_pass unix:/var/run/php/php{{ php_version }}-fpm.sock;
+        fastcgi_index index.php;
+        include fastcgi_params;
+        fastcgi_param SCRIPT_FILENAME $realpath_root$fastcgi_script_name;
+        fastcgi_param DOCUMENT_ROOT $realpath_root;
+    }
+
+    location ~ /\.ht {
+        deny all;
+    }
+}

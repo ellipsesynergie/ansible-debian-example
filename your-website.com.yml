@@ -1,0 +1,25 @@
+---
+- hosts: webserver
+  vars_files:
+  vars:
+    docroot: /var/www/your-website.com/
+    app_path: api.your-website.com
+    app_environment: production
+    app_folder_owner: www-data
+    app_folder_group: www-data
+    app_environment_template: .env.editor
+    php_version: 7.2
+    h5bp_config_file: frontend.conf
+    domains_list:
+      - { domain: 'your-website.com', nginx_template: 'default.conf', domain_alias: ''}
+  roles:
+    - apt
+    - locale
+    - ntp
+    - unzip
+    - nginx
+    - nginx-sites-configs
+    - aws-cli
+    - php
+    - deploy
+    - restart.webserver

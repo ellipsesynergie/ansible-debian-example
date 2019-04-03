@@ -1,0 +1,19 @@
+---
+- name: Install Ruby
+  apt: pkg=ruby state=present
+
+- name: "Get CodeDeploy"
+  get_url:
+    url: "https://aws-codedeploy-ca-central-1.s3.amazonaws.com/latest/install"
+    dest: /tmp/codedeploy-install
+
+- name: "Codedeploy Install Binary | Permission Executable"
+  file:
+    state: file
+    path: /tmp/codedeploy-install
+    group: root
+    owner: root
+    mode: 0755
+
+- name: "Codedeploy Install"
+  command: /tmp/codedeploy-install auto

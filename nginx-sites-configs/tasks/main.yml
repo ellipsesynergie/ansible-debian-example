@@ -1,0 +1,8 @@
+---
+- name: Add SFH Sites Configs
+  template: src={{ item.nginx_template }}.j2 dest=/etc/nginx/sites-available/{{ item.domain }}.conf owner=root group=root
+  with_items: "{{ domains_list }}"
+
+- name: Enable SFH Sites Configs
+  file: src=/etc/nginx/sites-available/{{ item.domain }}.conf dest=/etc/nginx/sites-enabled/{{ item.domain }}.conf state=link
+  with_items: "{{ domains_list }}"

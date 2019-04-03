@@ -1,0 +1,28 @@
+---
+- name: Get the current deploy date
+  shell: date '+%F.%H:%M:%S'
+  register: deploymentdate
+
+- name: Create application folder
+  file: dest={{ docroot }} state=directory
+
+- name: Pulling build from S3
+  shell: "aws s3 cp s3://bucket-name-here/master.zip {{ docroot }}"
+
+- name: Remove older build directory
+  file: dest={{ docroot }}build state=absent
+
+- name: Create build folder
+  file: dest={{ docroot }}build state=directory
+
+- name: Unzip build
+  unarchive:
+    src: "{{ docroot }}master.zip"
+    dest: "{{ docroot }}build"
+    remote_src: yes
+
+- name: Delete build file
+  file: dest={{ docroot }}master.zip state=absent
+
+- name: Copy environment configuration
+  template: src={{ app_environment_template }}.j2 dest={{ docroot }}build/.env

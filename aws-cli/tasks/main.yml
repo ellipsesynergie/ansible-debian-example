@@ -1,0 +1,30 @@
+---
+- name: 'Install Python PIP'
+  tags: 'aws-cli'
+  apt: >
+    pkg=python-pip
+    state=latest
+
+- name: 'Install AWS CLI'
+  tags: 'aws-cli'
+  pip: >
+    name=awscli
+    state=latest
+
+- name: 'Create the AWS config directory'
+  tags: 'aws-cli'
+  file: >
+    path=/root/.aws
+    state=directory
+    owner=root
+    group=root
+    mode=0755
+
+- name: 'Copy AWS CLI config'
+  tags: 'aws-cli'
+  template: >
+    src=aws_cli_config.j2
+    dest=/root/.aws/config
+    owner=root
+    group=root
+    mode=0644

@@ -1,0 +1,9 @@
+---
+- name: Create logs folder for the application
+  file: dest={{ docroot }}logs state=directory owner={{ app_folder_owner }} group={{ app_folder_group }}
+
+- name: Remove log folder from build folder
+  file: dest={{ docroot }}build/storage/logs state=absent
+
+- name: Create symbolink to keep log folder after deployment
+  file: src={{ docroot }}logs dest={{ docroot }}build/storage/logs state=link owner={{ app_folder_owner }} group={{ app_folder_group }}
